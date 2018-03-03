@@ -1,23 +1,29 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import axios from 'axios';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import reducers from './reducers/';
+import thunk from 'redux-thunk';
+import LoginForm from './components/LoginForm';
+import Home from './components/Home';
+import Profile from './components/Profile';
+import {Router, Scene, Stack} from 'react-native-router-flux';
+// import promise from 'redux-promise';
 
 export default class App extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
+      <Provider store={createStore(reducers, {}, applyMiddleware(thunk))} >
+        {/* <LoginForm /> */}
+        <Router>
+          <Stack key="root">
+            <Scene key="login" component={LoginForm} title="Login"></Scene>
+            <Scene key="home" component={Home} title="Stories"></Scene>
+            <Scene key="profile" component={Profile} title="Profile"></Scene>
+          </Stack>
+
+        </Router>
+      </Provider>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
